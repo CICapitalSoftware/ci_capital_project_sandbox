@@ -2,25 +2,37 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0a0a0a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  
+  /* Lock the thin Google asset directly into the Tailwind layout pipeline */
+  --font-sans: var(--font-financial-condensed), sans-serif;
+  --font-serif: var(--font-financial-condensed), sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Force razor-sharp structural compression rules on all document titles */
+h1, h2, h3, h4 {
+  font-family: var(--font-serif) !important;
+  font-weight: 300 !important; /* Forces the clean, needle-thin stroke profile */
+  letter-spacing: -0.02em !important; /* Squeezes layout tracking tightly for a premium presentation */
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
