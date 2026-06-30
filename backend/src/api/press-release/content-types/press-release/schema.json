@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "press_releases",
+  "info": {
+    "singularName": "press-release",
+    "pluralName": "press-releases",
+    "displayName": "PressRelease"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "date": {
+      "type": "date"
+    },
+    "category": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}
