@@ -1,16 +1,19 @@
 {
   "kind": "collectionType",
-  "collectionName": "business_lines",
+  "collectionName": "who_we_ares",
   "info": {
-    "singularName": "business-line",
-    "pluralName": "business-lines",
-    "displayName": "BusinessLine"
+    "singularName": "who-we-are",
+    "pluralName": "who-we-ares",
+    "displayName": "Who We Are"
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
+    "tag": {
+      "type": "string"
+    },
     "title": {
       "type": "string"
     },
@@ -26,6 +29,11 @@
         "videos",
         "audios"
       ]
+    },
+    "values": {
+      "type": "component",
+      "component": "elements.value-item",
+      "repeatable": true
     }
   }
 }
