@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_elements_dropdown_links",
+  "info": {
+    "displayName": "dropdownLink"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string"
+    },
+    "link": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

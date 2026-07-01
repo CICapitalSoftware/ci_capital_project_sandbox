@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "global_scales",
+  "info": {
+    "singularName": "global-scale",
+    "pluralName": "global-scales",
+    "displayName": "Global Scale"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "sub": {
+      "type": "string"
+    },
+    "stats": {
+      "type": "component",
+      "component": "elements.stat-item",
+      "repeatable": true
+    }
+  }
+}

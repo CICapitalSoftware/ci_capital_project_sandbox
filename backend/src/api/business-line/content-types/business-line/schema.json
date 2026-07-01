@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "business_lines",
+  "info": {
+    "singularName": "business-line",
+    "pluralName": "business-lines",
+    "displayName": "BusinessLine"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}
