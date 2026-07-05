@@ -1,30 +1,33 @@
 // app/layout.tsx
-import type { Metadata } from "next";
-import { Barlow_Condensed } from "next/font/google";
-import "./globals.css";
+import './globals.css';
+import { Inter, Playfair_Display } from 'next/font/google';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-// Load a high-performance, razor-thin corporate font vector straight from Google
-const financialSans = Barlow_Condensed({
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  variable: "--font-financial-condensed",
-  display: "swap",
+const inter = Inter({ subsets: ['latin'] });
+
+// ✅ Fixed: Playfair Display with valid weights
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'], // 300 removed – not available
+  display: 'swap',
 });
 
-export const metadata: Metadata = {
-  title: "CI Capital | Institutional Architecture Portal",
-  description: "Enterprise portfolio layout configured with thin-ruled financial typography layers.",
+export const metadata = {
+  title: 'CI Capital | Investment Banking',
+  description: 'CI Capital is Egypt\'s premier diversified financial services group…',
+  icons: {
+    icon: '/CICapitalLogo-Ar.png',
+  },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${financialSans.variable} antialiased bg-stone-50 text-neutral-950`}>
+    <html lang="en" className={inter.className}>
+      <body>
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );

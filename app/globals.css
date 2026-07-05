@@ -5,45 +5,35 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ============================================
-   FONTS & BASE
-   ============================================ */
-
+/* ===== BASE & FONTS ===== */
 html {
   scroll-behavior: smooth;
 }
-
 * {
   font-family: 'Roboto Slab', 'Merriweather', Georgia, 'Times New Roman', serif !important;
 }
-
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: white;
 }
-
 h1, h2, h3, h4, h5, h6 {
   font-weight: 300 !important;
   letter-spacing: -0.02em !important;
 }
-
 p {
   max-width: 70ch;
   line-height: 1.8;
 }
-
 .text-neutral-500 {
   color: #4b5563 !important;
 }
-
 *:focus-visible {
   outline: 2px solid #0284c7 !important;
   outline-offset: 2px !important;
 }
 
-/* ============================================
-   HEADER TRANSITIONS & DROPDOWN (used globally)
-   ============================================ */
+/* ===== HEADER TRANSITIONS & DROPDOWN ===== */
 .header-transition {
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -100,8 +90,6 @@ p {
   position: relative;
   display: inline-block;
 }
-
-/* Underline animation for nav items – used inline in layout, but keep fallback */
 .nav-item > span,
 .nav-item > a {
   position: relative;
@@ -121,15 +109,11 @@ p {
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .nav-item > span:hover::after,
-.nav-item > a:hover::after,
-.nav-item.active > span::after,
-.nav-item.active > a::after {
+.nav-item > a:hover::after {
   transform: scaleX(1);
 }
 
-/* ============================================
-   BACK-TO-TOP BUTTON
-   ============================================ */
+/* ===== BACK-TO-TOP BUTTON ===== */
 .back-to-top {
   position: fixed;
   bottom: 2rem;
@@ -157,9 +141,7 @@ p {
   transform: scale(1.05);
 }
 
-/* ============================================
-   STATS MARQUEE (Global Scale section)
-   ============================================ */
+/* ===== STATS MARQUEE (GLOBAL SCALE) ===== */
 .stats-marquee-wrapper {
   overflow: hidden;
   position: relative;
@@ -204,7 +186,6 @@ p {
   padding: 0 3rem;
   text-align: center;
   border-right: 1px solid rgba(255,255,255,0.15);
-  font-family: 'Roboto Slab', 'Merriweather', Georgia, 'Times New Roman', serif !important;
   cursor: default;
 }
 .stat-item:last-child {
@@ -290,9 +271,7 @@ p {
   }
 }
 
-/* ============================================
-   SOLUTION CARDS
-   ============================================ */
+/* ===== SOLUTION CARDS ===== */
 .solution-card {
   transition: all 0.3s ease;
 }
@@ -304,4 +283,54 @@ p {
 }
 .solution-card:hover .card-title {
   color: #0284c7;
+}
+/* Timeline animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+  opacity: 0;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+  opacity: 0;
+}
+/* globals.css */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+/* app/globals.css */
+.hero-serif {
+  font-family: 'Times New Roman', Times, serif;
 }

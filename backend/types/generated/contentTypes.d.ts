@@ -457,6 +457,7 @@ export interface ApiBusinessLineBusinessLine
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
     image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    link: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -495,6 +496,48 @@ export interface ApiGlobalScaleGlobalScale extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     stats: Schema.Attribute.Component<'elements.stat-item', true>;
     sub: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiHomeHeroHomeHero extends Struct.CollectionTypeSchema {
+  collectionName: 'home_heroes';
+  info: {
+    displayName: 'home hero';
+    pluralName: 'home-heroes';
+    singularName: 'home-hero';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    backgroundImage: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    backgroundVideo: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    buttonlink: Schema.Attribute.String;
+    buttontext: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::home-hero.home-hero'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    subtitle: Schema.Attribute.Text;
+    titleLine1: Schema.Attribute.String;
+    titleLine2: Schema.Attribute.String;
+    titleLine3: Schema.Attribute.String;
+    titleLine4: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -589,6 +632,42 @@ export interface ApiPressReleasePressRelease
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTimelineItemTimelineItem
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'timeline_items';
+  info: {
+    displayName: 'timeline item';
+    pluralName: 'timeline-items';
+    singularName: 'timeline-item';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    active: Schema.Attribute.Boolean;
+    category: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    date: Schema.Attribute.Date;
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::timeline-item.timeline-item'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID;
+    title: Schema.Attribute.String;
+    type: Schema.Attribute.Enumeration<['left', 'right']>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1140,9 +1219,11 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::business-line.business-line': ApiBusinessLineBusinessLine;
       'api::global-scale.global-scale': ApiGlobalScaleGlobalScale;
+      'api::home-hero.home-hero': ApiHomeHeroHomeHero;
       'api::metric.metric': ApiMetricMetric;
       'api::navigation.navigation': ApiNavigationNavigation;
       'api::press-release.press-release': ApiPressReleasePressRelease;
+      'api::timeline-item.timeline-item': ApiTimelineItemTimelineItem;
       'api::who-we-are.who-we-are': ApiWhoWeAreWhoWeAre;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

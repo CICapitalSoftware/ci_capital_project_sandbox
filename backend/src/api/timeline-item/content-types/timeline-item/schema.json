@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "timeline_items",
+  "info": {
+    "singularName": "timeline-item",
+    "pluralName": "timeline-items",
+    "displayName": "timeline item"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "category": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "left",
+        "right"
+      ]
+    },
+    "slug": {
+      "type": "uid"
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "date": {
+      "type": "date"
+    }
+  }
+}

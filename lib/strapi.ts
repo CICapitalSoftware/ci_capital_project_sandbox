@@ -17,3 +17,18 @@ export const getStrapiImage = (imageObj: any, fallback: string) => {
   return fallback;
 };
 
+// lib/strapi.js
+export async function fetchHomeHero() {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/home-hero?populate=*`,
+      { next: { revalidate: 60 } }
+    );
+    if (!res.ok) throw new Error('Failed to fetch hero');
+    const json = await res.json();
+    return json.data?.attributes || null;
+  } catch (error) {
+    console.error('Hero fetch error:', error);
+    return null;
+  }
+}
