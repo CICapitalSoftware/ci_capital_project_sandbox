@@ -16,12 +16,10 @@ const TRANSLATIONS = {
     navCareers: "Careers",
     navContact: "Contact Us",
     searchPlaceholder: "Search client gateway, indices, disclosures...",
-    
     globalScaleHeading: "Global scale, scope and strength",
     globalScaleSub: "Data as of Q1 2026",
     emptyGlobalScaleHeading: "Global Presence",
     emptyGlobalScaleSub: "Statistical data is currently being audited and updated.",
-    
     pause: "Pause",
     play: "Play",
     bizTag: "CORE SEGMENTS",
@@ -31,12 +29,10 @@ const TRANSLATIONS = {
     viewAll: "View All Disclosures \u2192",
     readMore: "Read Report \u2192",
     exploreMore: "Explore More \u2192",
-    
     emptyNewsHeading: "No News Available",
     emptyNewsSub: "Check back later for the latest corporate disclosures and updates.",
     emptySolutionsHeading: "No Solutions Available",
     emptySolutionsSub: "Check back later for our latest business lines and offerings.",
-    
     footerAbout: "CI Capital is a premier diversified financial services group in Egypt, offering institutional investment banking, asset management, and non-banking credit solutions.",
     footerLegal: "© 2026 CI Capital. All rights reserved.",
     footerPrivacy: "Privacy Policy",
@@ -56,12 +52,10 @@ const TRANSLATIONS = {
     navCareers: "الوظائف",
     navContact: "اتصل بنا",
     searchPlaceholder: "البحث في الإفصاحات والبوابات...",
-    
     globalScaleHeading: "النطاق العالمي والنطاق والقوة",
     globalScaleSub: "البيانات حتى الربع الأول ٢٠٢٦",
     emptyGlobalScaleHeading: "التواجد العالمي",
     emptyGlobalScaleSub: "يتم حالياً مراجعة وتحديث البيانات الإحصائية.",
-    
     pause: "إيقاف مؤقت",
     play: "تشغيل",
     bizTag: "القطاعات الأساسية",
@@ -71,12 +65,10 @@ const TRANSLATIONS = {
     viewAll: "عرض جميع الإفصاحات \u2190",
     readMore: "اقرأ التقرير \u2190",
     exploreMore: "اكتشف المزيد \u2190",
-    
     emptyNewsHeading: "لا توجد أخبار متاحة",
     emptyNewsSub: "يرجى التحقق لاحقاً للحصول على أحدث الإفصاحات والتحديثات.",
     emptySolutionsHeading: "لا توجد حلول متاحة",
     emptySolutionsSub: "يرجى التحقق لاحقاً لمعرفة أحدث قطاعات الأعمال والخدمات.",
-    
     footerAbout: "سي آي كابيتال هي مجموعة خدمات مالية متنوعة رائدة في مصر، تقدم الخدمات المصرفية الاستثمارية المؤسسية وإدارة الأصول وحلول الائتمان غير المصرفية.",
     footerLegal: "© ٢٠٢٦ سي آي كابيتال. جميع الحقوق محفوظة.",
     footerPrivacy: "سياسة الخصوصية",
@@ -101,7 +93,6 @@ async function fetchFromStrapi(path: string, locale: string = 'en') {
   }
 }
 
-// ✅ Updated: handles array response and returns first item (or null)
 async function fetchHomeHero(locale: string = 'en') {
   try {
     const url = `http://localhost:1337/api/home-heroes?populate=*`;
@@ -111,11 +102,9 @@ async function fetchHomeHero(locale: string = 'en') {
       return null;
     }
     const json = await res.json();
-    // If it's an array, take the first item
     if (Array.isArray(json.data) && json.data.length > 0) {
       return json.data[0];
     }
-    // If it's a single type (object with attributes)
     if (json.data?.attributes) {
       return json.data;
     }
@@ -233,7 +222,6 @@ export default function HomePage() {
       setIsLoading(true);
       setFetchError(false);
       
-      // 👇 Hero fetch – no hardcoded fallback
       const hero = await fetchHomeHero(currentLocale);
       setHeroData(hero);
 
@@ -394,7 +382,6 @@ export default function HomePage() {
   return (
     <main dir={t.dir} className="min-h-screen bg-white text-neutral-950 tracking-tight transition-all duration-300">
 
-      {/* ===== HERO (replaces About Us) ===== */}
       <Hero data={heroData} />
 
       {fetchError && (
@@ -555,7 +542,7 @@ export default function HomePage() {
           )}
         </section>
 
-        {/* MEDIA */}
+        {/* ===== MEDIA – PRESS RELEASES ===== */}
         <section id="media" className="scroll-mt-0">
           <div className="flex justify-between items-end mb-10">
             <div>
@@ -585,37 +572,42 @@ export default function HomePage() {
               ))
             ) : pressReleases.length > 0 ? (
               pressReleases.map((press: any) => {
-                const imageSrc = getStrapiImage(press.image, "/CICapitalLogo-Ar.png");
+                const attrs = press.attributes || press;
+                const imageSrc = getStrapiImage(attrs.image, "/CICapitalLogo-Ar.png");
+                // ✅ Use the numeric ID – guaranteed to exist
+                const id = press.id;
                 return (
-                  <article key={press.id} className="bg-white rounded-none border border-sky-100 shadow-sm flex flex-col overflow-hidden hover:shadow-md hover:border-sky-300 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-                    <div className="h-56 w-full bg-white flex items-center justify-center p-6 border-b border-sky-50 select-none">
-                      <img 
-                        src={imageSrc}
-                        alt="Corporate Document Asset" 
-                        className="max-w-full max-h-full object-contain opacity-90 transform hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
-                        onError={(e) => { e.currentTarget.src = "/CICapitalLogo-Ar.png"; }}
-                      />
-                    </div>
-                    <div className="p-8 py-12 flex-1 flex flex-col justify-between gap-6">
-                      <div>
-                        <div className="flex justify-between items-center gap-3 mb-4">
-                          <span className="text-[10px] font-bold tracking-wider uppercase bg-sky-50 text-sky-700 px-2 py-0.5 rounded-none">
-                            {press.category}
-                          </span>
-                          <span className="text-xs text-neutral-400 font-normal">{press.date}</span>
+                  <Link key={press.id} href={`/press-releases/${id}`}>
+                    <article className="bg-white rounded-none border border-sky-100 shadow-sm flex flex-col overflow-hidden hover:shadow-md hover:border-sky-300 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+                      <div className="h-56 w-full bg-white flex items-center justify-center p-6 border-b border-sky-50 select-none">
+                        <img 
+                          src={imageSrc}
+                          alt="Corporate Document Asset" 
+                          className="max-w-full max-h-full object-contain opacity-90 transform hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                          onError={(e) => { e.currentTarget.src = "/CICapitalLogo-Ar.png"; }}
+                        />
+                      </div>
+                      <div className="p-8 py-12 flex-1 flex flex-col justify-between gap-6">
+                        <div>
+                          <div className="flex justify-between items-center gap-3 mb-4">
+                            <span className="text-[10px] font-bold tracking-wider uppercase bg-sky-50 text-sky-700 px-2 py-0.5 rounded-none">
+                              {attrs.category}
+                            </span>
+                            <span className="text-xs text-neutral-400 font-normal">{attrs.date}</span>
+                          </div>
+                          <h3 className="text-lg font-light text-neutral-950 leading-snug uppercase tracking-tight line-clamp-3 hover:text-neutral-700 transition-colors">
+                            {attrs.title}
+                          </h3>
                         </div>
-                        <h3 className="text-lg font-light text-neutral-950 leading-snug uppercase tracking-tight line-clamp-3 hover:text-neutral-700 transition-colors">
-                          {press.title}
-                        </h3>
+                        <div className="pt-4 border-t border-sky-50">
+                          <span className="text-xs font-bold uppercase tracking-wider text-neutral-950 inline-flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
+                            {t.readMore}
+                          </span>
+                        </div>
                       </div>
-                      <div className="pt-4 border-t border-sky-50">
-                        <span className="text-xs font-bold uppercase tracking-wider text-neutral-950 inline-flex items-center gap-1 group cursor-pointer hover:gap-2 transition-all duration-200">
-                          {t.readMore}
-                        </span>
-                      </div>
-                    </div>
-                  </article>
+                    </article>
+                  </Link>
                 );
               })
             ) : (

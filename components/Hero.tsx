@@ -3,27 +3,20 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Playfair_Display } from 'next/font/google';
 
-// ✅ Fixed: Playfair Display with valid weights
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
-
-// ... rest of your component
 interface HeroData {
   titleLine1?: string;
   titleLine2?: string;
   titleLine3?: string;
   titleLine4?: string;
   subtitle?: string;
+  smallTitle?: string;
   buttontext?: string;
   buttonlink?: string;
   backgroundImage?: any;
   backgroundVideo?: any;
   image?: any;
+  logoImage?: any;
 }
 
 interface HeroProps {
@@ -43,8 +36,18 @@ export default function Hero({ data }: HeroProps) {
   const title3 = normalizedData?.titleLine3 || '';
   const title4 = normalizedData?.titleLine4 || '';
   const subtitle = normalizedData?.subtitle || '';
+  const smallTitle = normalizedData?.smallTitle || '';
   const buttonText = normalizedData?.buttontext || '';
   const buttonLink = normalizedData?.buttonlink || '';
+
+  let logoUrl = null;
+  const logo = normalizedData?.logoImage;
+  if (logo) {
+    const logoData = Array.isArray(logo) ? logo[0] : logo;
+    if (logoData?.url) {
+      logoUrl = `http://localhost:1337${logoData.url}`;
+    }
+  }
 
   useEffect(() => {
     let urls: string[] = [];
@@ -97,26 +100,13 @@ export default function Hero({ data }: HeroProps) {
   }
 
   return (
-    <section
-      ref={heroRef}
-      className="relative w-full h-screen overflow-hidden bg-neutral-900"
-    >
-      {/* Background */}
+    <section ref={heroRef} className="relative w-full h-screen overflow-hidden bg-neutral-900">
+      {/* Background - unchanged */}
       {bgVideoUrl ? (
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        >
+        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
           <source src={bgVideoUrl} type="video/mp4" />
           {imageUrls.length > 0 && (
-            <img
-              src={imageUrls[0]}
-              alt="background"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
+            <img src={imageUrls[0]} alt="background" className="absolute inset-0 w-full h-full object-cover" />
           )}
         </video>
       ) : hasMultipleImages ? (
@@ -130,9 +120,7 @@ export default function Hero({ data }: HeroProps) {
                 className={`absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-1000 ease-in-out ${
                   isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'
                 }`}
-                style={{
-                  backgroundImage: `url(${url})`,
-                }}
+                style={{ backgroundImage: `url(${url})` }}
               >
                 {isActive && (
                   <div
@@ -159,48 +147,44 @@ export default function Hero({ data }: HeroProps) {
 
       <div className="absolute inset-0 bg-black/35 z-10" />
 
-      {/* ===== CONTENT – Playfair Display + Wide Tracking ===== */}
       <div className="relative z-20 flex items-center justify-center h-full px-6 text-center text-white">
         <div className="max-w-4xl">
-          <h1 className={`${playfair.className} text-4xl md:text-6xl lg:text-7xl font-light leading-tight tracking-wide`}>
-            {title1 && (
-              <span className="block opacity-0 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-                {title1}
-              </span>
-            )}
-            {title2 && (
-              <span className="block opacity-0 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-                {title2}
-              </span>
-            )}
-            {title3 && (
-              <span className="block opacity-0 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-                {title3}
-              </span>
-            )}
-            {title4 && (
-              <span className="block opacity-0 animate-fade-in-up" style={{ animationDelay: '0.7s' }}>
-                {title4}
-              </span>
-            )}
-          </h1>
+          {logoUrl ? (
+            <div className="mb-6 flex justify-center">
+              <img src={logoUrl} alt="Company Logo" className="max-h-32 md:max-h-48 w-auto object-contain" />
+            </div>
+          ) : (
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-light leading-tight tracking-wide">
+              {title1 && <span className="block opacity-0 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>{title1}</span>}
+              {title2 && <span className="block opacity-0 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>{title2}</span>}
+              {title3 && <span className="block opacity-0 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>{title3}</span>}
+              {title4 && <span className="block opacity-0 animate-fade-in-up" style={{ animationDelay: '0.7s' }}>{title4}</span>}
+            </h1>
+          )}
+
+          {/* 👇 smallTitle now BIGGER – same size as a heading */}
+          {smallTitle && (
+            <p
+              className="text-3xl md:text-4xl font-light text-white/80 max-w-2xl mx-auto opacity-0 animate-fade-in-up tracking-wide"
+              style={{ animationDelay: '0.2s' }}
+            >
+              {smallTitle}
+            </p>
+          )}
 
           {subtitle && (
             <div
-              className={`${playfair.className} mt-4 text-lg md:text-xl text-white/80 max-w-2xl mx-auto opacity-0 animate-fade-in-up tracking-wide`}
+              className="mt-4 text-lg md:text-xl text-white/80 max-w-2xl mx-auto opacity-0 animate-fade-in-up tracking-wide"
               style={{ animationDelay: '0.9s' }}
               dangerouslySetInnerHTML={{ __html: subtitle }}
             />
           )}
 
           {buttonText && buttonLink && (
-            <div
-              className="mt-8 opacity-0 animate-fade-in-up"
-              style={{ animationDelay: '1.1s' }}
-            >
+            <div className="mt-8 opacity-0 animate-fade-in-up" style={{ animationDelay: '1.1s' }}>
               <Link
                 href={buttonLink}
-                className={`${playfair.className} inline-block border-2 border-white px-8 py-3 text-sm font-medium uppercase tracking-widest hover:bg-white hover:text-neutral-900 transition-colors`}
+                className="inline-block border-2 border-white px-8 py-3 text-sm font-medium uppercase tracking-widest hover:bg-white hover:text-neutral-900 transition-colors"
               >
                 {buttonText}
               </Link>

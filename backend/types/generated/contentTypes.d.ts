@@ -532,6 +532,10 @@ export interface ApiHomeHeroHomeHero extends Struct.CollectionTypeSchema {
       'api::home-hero.home-hero'
     > &
       Schema.Attribute.Private;
+    logoImage: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
     publishedAt: Schema.Attribute.DateTime;
     subtitle: Schema.Attribute.Text;
     titleLine1: Schema.Attribute.String;
@@ -619,6 +623,7 @@ export interface ApiPressReleasePressRelease
   };
   attributes: {
     category: Schema.Attribute.String;
+    content: Schema.Attribute.Blocks;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -631,7 +636,52 @@ export interface ApiPressReleasePressRelease
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'title'>;
     title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTimelineHeroTimelineHero
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'timeline_heroes';
+  info: {
+    displayName: 'timeline hero';
+    pluralName: 'timeline-heroes';
+    singularName: 'timeline-hero';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    backgroundimage: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    buttonlink: Schema.Attribute.String;
+    buttontext: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::timeline-hero.timeline-hero'
+    > &
+      Schema.Attribute.Private;
+    logoimage: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    smallTitle: Schema.Attribute.String;
+    subtitle: Schema.Attribute.Blocks;
+    titleLine1: Schema.Attribute.String;
+    titleLine2: Schema.Attribute.String;
+    titleLine3: Schema.Attribute.String;
+    titleLine4: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1223,6 +1273,7 @@ declare module '@strapi/strapi' {
       'api::metric.metric': ApiMetricMetric;
       'api::navigation.navigation': ApiNavigationNavigation;
       'api::press-release.press-release': ApiPressReleasePressRelease;
+      'api::timeline-hero.timeline-hero': ApiTimelineHeroTimelineHero;
       'api::timeline-item.timeline-item': ApiTimelineItemTimelineItem;
       'api::who-we-are.who-we-are': ApiWhoWeAreWhoWeAre;
       'plugin::content-releases.release': PluginContentReleasesRelease;

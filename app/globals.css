@@ -1,6 +1,11 @@
 /* app/globals.css */
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Roboto+Slab:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Exo+2:400,700&subset=cyrillic');
+/* Custom class for hero */
+.hero-rubik {
+  font-family: 'Rubik', sans-serif !important;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -333,4 +338,14 @@ p {
 /* app/globals.css */
 .hero-serif {
   font-family: 'Times New Roman', Times, serif;
+}
+/* app/globals.css – add at the end */
+.hero-times {
+  font-family: 'Times New Roman', Times, serif !important;
+}
+.hero-premium-serif {
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, 'Times New Roman', serif !important;
+}
+html {
+  scroll-behavior: smooth;
 }

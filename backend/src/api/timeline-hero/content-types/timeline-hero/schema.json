@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "home_heroes",
+  "collectionName": "timeline_heroes",
   "info": {
-    "singularName": "home-hero",
-    "pluralName": "home-heroes",
-    "displayName": "home hero"
+    "singularName": "timeline-hero",
+    "pluralName": "timeline-heroes",
+    "displayName": "timeline hero"
   },
   "options": {
     "draftAndPublish": true
@@ -24,7 +24,7 @@
       "type": "string"
     },
     "subtitle": {
-      "type": "text"
+      "type": "blocks"
     },
     "buttontext": {
       "type": "string"
@@ -32,7 +32,7 @@
     "buttonlink": {
       "type": "string"
     },
-    "backgroundImage": {
+    "backgroundimage": {
       "type": "media",
       "multiple": true,
       "allowedTypes": [
@@ -42,7 +42,7 @@
         "audios"
       ]
     },
-    "backgroundVideo": {
+    "logoimage": {
       "type": "media",
       "multiple": true,
       "allowedTypes": [
@@ -52,15 +52,8 @@
         "audios"
       ]
     },
-    "logoImage": {
-      "type": "media",
-      "multiple": true,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
+    "smallTitle": {
+      "type": "string"
     }
   }
 }
