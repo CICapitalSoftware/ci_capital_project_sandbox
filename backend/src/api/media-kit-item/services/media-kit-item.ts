@@ -1,0 +1,7 @@
+/**
+ * media-kit-item service
+ */
+
+import { factories } from '@strapi/strapi';
+
+export default factories.createCoreService('api::media-kit-item.media-kit-item');

@@ -36,6 +36,9 @@
     },
     "content": {
       "type": "blocks"
+    },
+    "bullets": {
+      "type": "json"
     }
   }
 }

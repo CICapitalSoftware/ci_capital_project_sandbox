@@ -548,6 +548,39 @@ export interface ApiHomeHeroHomeHero extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiMediaKitItemMediaKitItem
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'media_kit_items';
+  info: {
+    displayName: 'Media Kit Item';
+    pluralName: 'media-kit-items';
+    singularName: 'media-kit-item';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::media-kit-item.media-kit-item'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiMetricMetric extends Struct.CollectionTypeSchema {
   collectionName: 'metrics';
   info: {
@@ -610,6 +643,43 @@ export interface ApiNavigationNavigation extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiPersonPerson extends Struct.CollectionTypeSchema {
+  collectionName: 'people';
+  info: {
+    displayName: 'Person';
+    pluralName: 'people';
+    singularName: 'person';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    category: Schema.Attribute.Enumeration<
+      ['board-of-directors', 'executive-management']
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::person.person'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPressReleasePressRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'press_releases';
@@ -622,6 +692,7 @@ export interface ApiPressReleasePressRelease
     draftAndPublish: true;
   };
   attributes: {
+    bullets: Schema.Attribute.JSON;
     category: Schema.Attribute.String;
     content: Schema.Attribute.Blocks;
     createdAt: Schema.Attribute.DateTime;
@@ -638,6 +709,70 @@ export interface ApiPressReleasePressRelease
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'title'>;
     title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiResultItemResultItem extends Struct.CollectionTypeSchema {
+  collectionName: 'result_items';
+  info: {
+    displayName: 'Result Item';
+    pluralName: 'result-items';
+    singularName: 'result-item';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    category: Schema.Attribute.Enumeration<
+      ['Analyst Packs', 'Earnings Release', 'Financial Statements']
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    file: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    language: Schema.Attribute.Enumeration<['English', 'Arabic']>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::result-item.result-item'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    year: Schema.Attribute.Integer;
+  };
+}
+
+export interface ApiTimelineEraTimelineEra extends Struct.CollectionTypeSchema {
+  collectionName: 'timeline_eras';
+  info: {
+    displayName: 'Timeline Era';
+    pluralName: 'timeline-eras';
+    singularName: 'timeline-era';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    endYear: Schema.Attribute.Integer;
+    label: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::timeline-era.timeline-era'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    startYear: Schema.Attribute.Integer;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -708,6 +843,10 @@ export interface ApiTimelineItemTimelineItem
     date: Schema.Attribute.Date;
     description: Schema.Attribute.Text;
     icon: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1270,9 +1409,13 @@ declare module '@strapi/strapi' {
       'api::business-line.business-line': ApiBusinessLineBusinessLine;
       'api::global-scale.global-scale': ApiGlobalScaleGlobalScale;
       'api::home-hero.home-hero': ApiHomeHeroHomeHero;
+      'api::media-kit-item.media-kit-item': ApiMediaKitItemMediaKitItem;
       'api::metric.metric': ApiMetricMetric;
       'api::navigation.navigation': ApiNavigationNavigation;
+      'api::person.person': ApiPersonPerson;
       'api::press-release.press-release': ApiPressReleasePressRelease;
+      'api::result-item.result-item': ApiResultItemResultItem;
+      'api::timeline-era.timeline-era': ApiTimelineEraTimelineEra;
       'api::timeline-hero.timeline-hero': ApiTimelineHeroTimelineHero;
       'api::timeline-item.timeline-item': ApiTimelineItemTimelineItem;
       'api::who-we-are.who-we-are': ApiWhoWeAreWhoWeAre;

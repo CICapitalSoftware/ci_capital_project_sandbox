@@ -551,9 +551,15 @@ export default function HomePage() {
                 {t.mediaHeading}
               </h2>
             </div>
-            <button className="text-xs font-bold uppercase tracking-wider text-neutral-950 hover:underline cursor-pointer transition-colors duration-200">
-              {t.viewAll}
-            </button>
+            {/* 👇 "View All" button only if more than 3 releases */}
+            {pressReleases.length > 3 && (
+              <Link
+                href="/media-relations/media-releases"
+                className="text-xs font-bold uppercase tracking-wider text-neutral-950 hover:underline cursor-pointer transition-colors duration-200"
+              >
+                {t.viewAll}
+              </Link>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -571,45 +577,52 @@ export default function HomePage() {
                 </article>
               ))
             ) : pressReleases.length > 0 ? (
-              pressReleases.map((press: any) => {
-                const attrs = press.attributes || press;
-                const imageSrc = getStrapiImage(attrs.image, "/CICapitalLogo-Ar.png");
-                // ✅ Use the numeric ID – guaranteed to exist
-                const id = press.id;
-                return (
-                  <Link key={press.id} href={`/press-releases/${id}`}>
-                    <article className="bg-white rounded-none border border-sky-100 shadow-sm flex flex-col overflow-hidden hover:shadow-md hover:border-sky-300 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-                      <div className="h-56 w-full bg-white flex items-center justify-center p-6 border-b border-sky-50 select-none">
-                        <img 
-                          src={imageSrc}
-                          alt="Corporate Document Asset" 
-                          className="max-w-full max-h-full object-contain opacity-90 transform hover:scale-105 transition-transform duration-300"
-                          loading="lazy"
-                          onError={(e) => { e.currentTarget.src = "/CICapitalLogo-Ar.png"; }}
-                        />
-                      </div>
-                      <div className="p-8 py-12 flex-1 flex flex-col justify-between gap-6">
-                        <div>
-                          <div className="flex justify-between items-center gap-3 mb-4">
-                            <span className="text-[10px] font-bold tracking-wider uppercase bg-sky-50 text-sky-700 px-2 py-0.5 rounded-none">
-                              {attrs.category}
-                            </span>
-                            <span className="text-xs text-neutral-400 font-normal">{attrs.date}</span>
+              // Sort by date (newest first) and take first 3
+              [...pressReleases]
+                .sort((a, b) => {
+                  const dateA = new Date((a.attributes || a).date);
+                  const dateB = new Date((b.attributes || b).date);
+                  return dateB.getTime() - dateA.getTime();
+                })
+                .slice(0, 3)
+                .map((press: any) => {
+                  const attrs = press.attributes || press;
+                  const imageSrc = getStrapiImage(attrs.image, "/CICapitalLogo-Ar.png");
+                  const slug = attrs.slug;
+                  return (
+                    <Link key={press.id} href={`/press-releases/${slug}`}>
+                      <article className="bg-white rounded-none border border-sky-100 shadow-sm flex flex-col overflow-hidden hover:shadow-md hover:border-sky-300 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
+                        <div className="h-56 w-full bg-white flex items-center justify-center p-6 border-b border-sky-50 select-none">
+                          <img
+                            src={imageSrc}
+                            alt="Corporate Document Asset"
+                            className="max-w-full max-h-full object-contain opacity-90 transform hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                            onError={(e) => { e.currentTarget.src = "/CICapitalLogo-Ar.png"; }}
+                          />
+                        </div>
+                        <div className="p-8 py-12 flex-1 flex flex-col justify-between gap-6">
+                          <div>
+                            <div className="flex justify-between items-center gap-3 mb-4">
+                              <span className="text-[10px] font-bold tracking-wider uppercase bg-sky-50 text-sky-700 px-2 py-0.5 rounded-none">
+                                {attrs.category}
+                              </span>
+                              <span className="text-xs text-neutral-400 font-normal">{attrs.date}</span>
+                            </div>
+                            <h3 className="text-lg font-light text-neutral-950 leading-snug uppercase tracking-tight line-clamp-3 hover:text-neutral-700 transition-colors">
+                              {attrs.title}
+                            </h3>
                           </div>
-                          <h3 className="text-lg font-light text-neutral-950 leading-snug uppercase tracking-tight line-clamp-3 hover:text-neutral-700 transition-colors">
-                            {attrs.title}
-                          </h3>
+                          <div className="pt-4 border-t border-sky-50">
+                            <span className="text-xs font-bold uppercase tracking-wider text-neutral-950 inline-flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
+                              {t.readMore}
+                            </span>
+                          </div>
                         </div>
-                        <div className="pt-4 border-t border-sky-50">
-                          <span className="text-xs font-bold uppercase tracking-wider text-neutral-950 inline-flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
-                            {t.readMore}
-                          </span>
-                        </div>
-                      </div>
-                    </article>
-                  </Link>
-                );
-              })
+                      </article>
+                    </Link>
+                  );
+                })
             ) : (
               <div className="col-span-1 md:col-span-3 bg-white border border-sky-100 shadow-sm p-16 flex flex-col items-center justify-center text-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-12 h-12 text-sky-200 mb-4">

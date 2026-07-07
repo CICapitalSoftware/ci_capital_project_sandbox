@@ -162,7 +162,6 @@ export default function Hero({ data }: HeroProps) {
             </h1>
           )}
 
-          {/* 👇 smallTitle now BIGGER – same size as a heading */}
           {smallTitle && (
             <p
               className="text-3xl md:text-4xl font-light text-white/80 max-w-2xl mx-auto opacity-0 animate-fade-in-up tracking-wide"

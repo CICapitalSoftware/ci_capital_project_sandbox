@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "result_items",
+  "info": {
+    "singularName": "result-item",
+    "pluralName": "result-items",
+    "displayName": "Result Item"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "Analyst Packs",
+        "Earnings Release",
+        "Financial Statements"
+      ]
+    },
+    "year": {
+      "type": "integer"
+    },
+    "file": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "language": {
+      "type": "enumeration",
+      "enum": [
+        "English",
+        "Arabic"
+      ]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "media_kit_items",
+  "info": {
+    "singularName": "media-kit-item",
+    "pluralName": "media-kit-items",
+    "displayName": "Media Kit Item"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}
