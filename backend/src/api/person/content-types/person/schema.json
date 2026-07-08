@@ -36,6 +36,12 @@
         "board-of-directors",
         "executive-management"
       ]
+    },
+    "bio": {
+      "type": "blocks"
+    },
+    "displayOrder": {
+      "type": "integer"
     }
   }
 }

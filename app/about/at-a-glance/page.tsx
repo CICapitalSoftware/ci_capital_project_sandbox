@@ -1,129 +1,217 @@
-"use client";
+// app/about/at-a-glance/page.tsx
+import Link from 'next/link';
+import { getStrapiImage } from '@/lib/strapi';
 
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
+// ─── Robust rich text renderer ──────────────────────────────────
+function renderRichText(content: any) {
+  if (!content) return null;
 
-// Reuse the fetch functions from the homepage
-async function fetchFromStrapi(path: string, locale: string = 'en') {
-  try {
-    const res = await fetch(`http://localhost:1337/api/${path}?populate=*&locale=${locale}`);
-    if (!res.ok) throw new Error(`Failed to fetch ${path}`);
-    const json = await res.json();
-    return json.data || [];
-  } catch (error) {
-    console.error(`Error fetching ${path}:`, error);
-    return [];
-  }
-}
-
-const getStrapiImage = (imageObj: any, fallback: string) => {
-  if (!imageObj) return fallback;
-  if (typeof imageObj === 'string') return imageObj; 
-  if (imageObj.url) return `http://localhost:1337${imageObj.url}`;
-  if (Array.isArray(imageObj) && imageObj[0]?.url) return `http://localhost:1337${imageObj[0].url}`;
-  return fallback;
-};
-
-export default function AtAGlancePage() {
-  const [locale, setLocale] = useState<'en' | 'ar'>('en');
-  const [isLoading, setIsLoading] = useState(true);
-  const [aboutData, setAboutData] = useState<any>(null);
-
-  useEffect(() => {
-    async function loadData() {
-      setIsLoading(true);
-      const data = await fetchFromStrapi('who-we-ares', locale);
-      setAboutData(data?.[0] || null);
-      setIsLoading(false);
-    }
-    loadData();
-  }, [locale]);
-
-  if (isLoading) {
+  if (typeof content === 'string') {
     return (
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-sky-100 w-1/4"></div>
-          <div className="h-12 bg-sky-100 w-3/4"></div>
-          <div className="h-6 bg-sky-100 w-full"></div>
-          <div className="h-6 bg-sky-100 w-full"></div>
-        </div>
-      </section>
+      <p className="text-neutral-700 text-base md:text-lg leading-relaxed mb-4">
+        {content}
+      </p>
     );
   }
 
-  const attrs = aboutData?.attributes || aboutData || {};
+  if (Array.isArray(content)) {
+    return content.map((block, index) => {
+      if (block.type === 'paragraph') {
+        const text = block.children?.map((child: any) => child.text || '').join('') || '';
+        return (
+          <p key={index} className="text-neutral-700 text-base md:text-lg leading-relaxed mb-4">
+            {text}
+          </p>
+        );
+      }
+      if (block.type === 'list' && block.format === 'unordered') {
+        const items = block.children?.map((item: any) => {
+          const itemText = item.children?.map((c: any) => c.text || '').join('') || '';
+          return (
+            <li key={item.id || index} className="text-neutral-700 text-base md:text-lg leading-relaxed">
+              {itemText}
+            </li>
+          );
+        }) || [];
+        return <ul key={index} className="list-disc pl-6 mb-4 space-y-1">{items}</ul>;
+      }
+      return null;
+    });
+  }
+
+  return null;
+}
+
+// ─── Fetch data ──────────────────────────────────────────────────
+async function getAboutPage() {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/about-page?populate=*`,
+      { next: { revalidate: 60 } }
+    );
+    if (!res.ok) {
+      console.error('❌ Failed to fetch about-page:', res.status);
+      return null;
+    }
+    const json = await res.json();
+    console.log('📦 About page data:', JSON.stringify(json, null, 2));
+    
+    const attrs = json.data?.attributes || json.data;
+    return attrs || null;
+  } catch (error) {
+    console.error('❌ Fetch error:', error);
+    return null;
+  }
+}
+
+// ─── Page Component ──────────────────────────────────────────────
+export default async function AtAGlancePage() {
+  const data = await getAboutPage();
+
+  // Fallback content
+  const heroTitle = data?.heroTitle || 'At a Glance';
+  const heroSubtitle = data?.heroSubtitle || 'Building a better future';
+  const heroImage = data?.heroImage || null;
+  const stats = data?.stats || [];
+  const introTitle = data?.introTitle || '';
+  const introText = data?.introText || null;
+  const globalPresenceTitle = data?.globalPresenceTitle || '';
+  const globalPresenceText = data?.globalPresenceText || null;
+  const highlights = data?.highlightCards || [];
+  const ctaText = data?.ctaText || '';
+  const ctaLink = data?.ctaLink || '';
+
+  // Get the hero image URL
+  const heroImageUrl = heroImage ? getStrapiImage(heroImage, '') : null;
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-16">
-      <div className="mb-8">
-        <h1 className="text-4xl md:text-5xl font-light text-neutral-950 uppercase tracking-tight mb-2">
-          At a Glance
-        </h1>
-        <p className="text-neutral-500 text-sm tracking-wider uppercase">
-          {attrs.tag || "ABOUT CI CAPITAL"}
-        </p>
-        <div className="w-16 h-0.5 bg-sky-600 mt-4"></div>
+    <section className="w-full bg-white">
+      {/* ─── Hero ──────────────────────────────────────────────────── */}
+      <div className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden bg-sky-700 flex items-center justify-center">
+        {heroImageUrl && (
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${heroImageUrl})` }}
+          />
+        )}
+        {/* Overlay – reduces opacity for better text contrast */}
+        <div className="absolute inset-0 bg-black/30" />
+        
+        {/* Content – centered over the image */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center text-white">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight">
+            {heroTitle}
+          </h1>
+          {heroSubtitle && (
+            <p className="text-lg md:text-xl text-white/80 mt-4 max-w-2xl mx-auto">
+              {heroSubtitle}
+            </p>
+          )}
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        <div>
-          <h2 className="text-2xl md:text-3xl font-light text-neutral-950 uppercase tracking-tight mb-4">
-            {attrs.title || "Who We Are"}
-          </h2>
-          <p className="text-neutral-700 text-lg leading-relaxed font-light">
-            {attrs.description || "CI Capital is Egypt's premier diversified financial services group, delivering institutional-grade investment banking, asset management, securities brokerage, and non-banking credit solutions."}
-          </p>
-          
-          {attrs.values && attrs.values.length > 0 && (
-            <div className="flex flex-wrap gap-3 mt-6">
-              {attrs.values.map((value: any, idx: number) => (
-                <span key={idx} className="inline-block bg-sky-50 border border-sky-200 text-sky-700 text-sm font-medium px-4 py-2 rounded-none tracking-wide">
-                  {typeof value === 'string' ? value : value.label ?? "Value"}
-                </span>
-              ))}
+      {/* ─── Stats ────────────────────────────────────────────────── */}
+      {stats.length > 0 && (
+        <div className="max-w-7xl mx-auto px-6 -mt-8 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {stats.map((stat: any, idx: number) => (
+              <div
+                key={idx}
+                className="bg-white shadow-lg border border-sky-100 p-6 text-center"
+              >
+                <div className="text-3xl md:text-4xl font-bold text-sky-600">
+                  {stat.value}
+                </div>
+                <div className="text-sm text-neutral-500 mt-1">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ─── Intro ────────────────────────────────────────────────── */}
+      {(introTitle || introText) && (
+        <div className="max-w-4xl mx-auto px-6 py-16 md:py-20">
+          {introTitle && (
+            <h2 className="text-3xl md:text-4xl font-light text-neutral-950 tracking-tight mb-4">
+              {introTitle}
+            </h2>
+          )}
+          {introText && (
+            <div className="prose prose-lg max-w-none prose-headings:font-light prose-headings:tracking-tight prose-a:text-sky-600">
+              {renderRichText(introText)}
             </div>
           )}
         </div>
+      )}
 
-        <div className="relative h-64 md:h-80 lg:h-96 bg-sky-50 overflow-hidden shadow-inner rounded-none">
-          <img 
-            src={getStrapiImage(attrs.image, "/about-placeholder.jpg")} 
-            alt="About CI Capital" 
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-              const parent = e.currentTarget.parentElement;
-              if (parent) {
-                const fallback = document.createElement('div');
-                fallback.className = 'w-full h-full flex items-center justify-center bg-sky-100 text-sky-600 text-xl font-light';
-                fallback.innerHTML = 'CI CAPITAL<br/><span class="text-sm">Est. 2006</span>';
-                parent.appendChild(fallback);
-              }
-            }}
-          />
+      {/* ─── Global Presence ──────────────────────────────────────── */}
+      {(globalPresenceTitle || globalPresenceText) && (
+        <div className="bg-neutral-50 py-16 md:py-20 border-t border-neutral-100">
+          <div className="max-w-4xl mx-auto px-6">
+            {globalPresenceTitle && (
+              <h2 className="text-3xl md:text-4xl font-light text-neutral-950 tracking-tight mb-4">
+                {globalPresenceTitle}
+              </h2>
+            )}
+            {globalPresenceText && (
+              <div className="prose prose-lg max-w-none prose-headings:font-light prose-headings:tracking-tight prose-a:text-sky-600">
+                {renderRichText(globalPresenceText)}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Key Stats */}
-      <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white border border-sky-100 shadow-sm p-6 text-center">
-          <div className="text-4xl font-light text-sky-600">186B+</div>
-          <div className="text-sm text-neutral-500 uppercase tracking-wider mt-2">Assets Under Management</div>
+      {/* ─── Highlight Cards ──────────────────────────────────────── */}
+      {highlights.length > 0 && (
+        <div className="max-w-7xl mx-auto px-6 py-16 md:py-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {highlights.map((card: any, idx: number) => {
+              const iconUrl = card.icon ? getStrapiImage(card.icon, '') : null;
+              return (
+                <Link
+                  key={idx}
+                  href={card.link || '#'}
+                  className="group block bg-white border border-sky-100 p-8 hover:shadow-md transition-shadow duration-300"
+                >
+                  {iconUrl && (
+                    <div className="w-12 h-12 mb-4 flex items-center justify-center">
+                      <img
+                        src={iconUrl}
+                        alt={card.title}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  )}
+                  <h3 className="text-xl font-medium text-neutral-950 group-hover:text-sky-600 transition-colors">
+                    {card.title}
+                  </h3>
+                  {card.description && (
+                    <p className="text-neutral-600 text-sm mt-2 leading-relaxed">
+                      {card.description}
+                    </p>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
         </div>
-        <div className="bg-white border border-sky-100 shadow-sm p-6 text-center">
-          <div className="text-4xl font-light text-sky-600">30+</div>
-          <div className="text-sm text-neutral-500 uppercase tracking-wider mt-2">Transactions (2025)</div>
+      )}
+
+      {/* ─── CTA ────────────────────────────────────────────────────── */}
+      {ctaText && ctaLink && (
+        <div className="bg-sky-600 text-white py-16 md:py-20">
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <Link
+              href={ctaLink}
+              className="inline-block border-2 border-white px-8 py-3 text-sm font-medium uppercase tracking-wider hover:bg-white hover:text-sky-600 transition-colors"
+            >
+              {ctaText}
+            </Link>
+          </div>
         </div>
-        <div className="bg-white border border-sky-100 shadow-sm p-6 text-center">
-          <div className="text-4xl font-light text-sky-600">22,900+</div>
-          <div className="text-sm text-neutral-500 uppercase tracking-wider mt-2">Clients</div>
-        </div>
-        <div className="bg-white border border-sky-100 shadow-sm p-6 text-center">
-          <div className="text-4xl font-light text-sky-600">3</div>
-          <div className="text-sm text-neutral-500 uppercase tracking-wider mt-2">Global Offices</div>
-        </div>
-      </div>
+      )}
     </section>
   );
 }

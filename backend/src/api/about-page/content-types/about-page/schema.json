@@ -1,0 +1,56 @@
+{
+  "kind": "singleType",
+  "collectionName": "about_pages",
+  "info": {
+    "singularName": "about-page",
+    "pluralName": "about-pages",
+    "displayName": "about page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroSubtitle": {
+      "type": "string"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "introTitle": {
+      "type": "string"
+    },
+    "introText": {
+      "type": "text"
+    },
+    "globalPresenceTitle": {
+      "type": "string"
+    },
+    "globalPresenceText": {
+      "type": "blocks"
+    },
+    "ctaText": {
+      "type": "string"
+    },
+    "stats": {
+      "type": "component",
+      "component": "elements.stat",
+      "repeatable": true
+    },
+    "highlightCards": {
+      "type": "component",
+      "component": "elements.highlight-card",
+      "repeatable": true
+    }
+  }
+}
