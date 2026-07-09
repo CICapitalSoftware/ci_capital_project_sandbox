@@ -43,7 +43,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto mt-8 pt-8 border-t border-neutral-800 flex flex-col sm:flex-row justify-between items-center text-sm text-neutral-400">
         <p>© 2026 CI Capital. All rights reserved.</p>
         <div className="flex gap-6 mt-4 sm:mt-0">
-          <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+          <Link href="/privacy-policy" className="hover:text-white transition-colors">
+            Privacy Policy
+          </Link>
           <a href="#" className="hover:text-white transition-colors">Terms of Use</a>
         </div>
       </div>

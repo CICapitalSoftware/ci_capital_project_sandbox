@@ -1,21 +1,24 @@
 // app/about/at-a-glance/page.tsx
 import Link from 'next/link';
 import { getStrapiImage } from '@/lib/strapi';
+import Hero from '@/components/Hero';
+import FlipStatCard from '@/components/FlipStatCard';
 
-// ─── Robust rich text renderer ──────────────────────────────────
+// ─── Rich text renderer ──────────────────────────────────────
 function renderRichText(content: any) {
   if (!content) return null;
-
   if (typeof content === 'string') {
-    return (
-      <p className="text-neutral-700 text-base md:text-lg leading-relaxed mb-4">
-        {content}
-      </p>
-    );
+    return <p className="text-neutral-700 text-base md:text-lg leading-relaxed mb-4">{content}</p>;
   }
-
   if (Array.isArray(content)) {
     return content.map((block, index) => {
+      if (block.type === 'heading') {
+        const level = block.level || 2;
+        const text = block.children?.map((child: any) => child.text || '').join('') || '';
+        const className = `text-${level === 2 ? '2xl' : 'xl'} md:text-${level === 2 ? '3xl' : '2xl'} font-light text-neutral-950 tracking-tight mt-8 mb-4`;
+        const Tag = `h${level}` as keyof JSX.IntrinsicElements;
+        return <Tag key={index} className={className}>{text}</Tag>;
+      }
       if (block.type === 'paragraph') {
         const text = block.children?.map((child: any) => child.text || '').join('') || '';
         return (
@@ -38,136 +41,134 @@ function renderRichText(content: any) {
       return null;
     });
   }
-
   return null;
 }
 
-// ─── Fetch data ──────────────────────────────────────────────────
+// ─── Fetch data ──────────────────────────────────────────────
 async function getAboutPage() {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/about-page?populate=*`,
       { next: { revalidate: 60 } }
     );
-    if (!res.ok) {
-      console.error('❌ Failed to fetch about-page:', res.status);
-      return null;
-    }
+    if (!res.ok) return null;
     const json = await res.json();
-    console.log('📦 About page data:', JSON.stringify(json, null, 2));
-    
     const attrs = json.data?.attributes || json.data;
     return attrs || null;
-  } catch (error) {
-    console.error('❌ Fetch error:', error);
+  } catch {
     return null;
   }
 }
 
-// ─── Page Component ──────────────────────────────────────────────
+// ─── Page Component ──────────────────────────────────────────
 export default async function AtAGlancePage() {
   const data = await getAboutPage();
 
-  // Fallback content
-  const heroTitle = data?.heroTitle || 'At a Glance';
-  const heroSubtitle = data?.heroSubtitle || 'Building a better future';
-  const heroImage = data?.heroImage || null;
+  // Hero data
+  const heroData = {
+    backgroundImage: data?.heroImage || null,
+    logoImage: data?.logoImage || null,
+    subtitle: data?.caption || '',
+    buttontext: data?.buttonText || '',
+    buttonlink: data?.buttonLink || '#stats',
+  };
+
   const stats = data?.stats || [];
-  const introTitle = data?.introTitle || '';
-  const introText = data?.introText || null;
-  const globalPresenceTitle = data?.globalPresenceTitle || '';
-  const globalPresenceText = data?.globalPresenceText || null;
-  const highlights = data?.highlightCards || [];
+  const contentBlocks = data?.contentBlocks || [];
+  const exploreCards = data?.highlightCards || [];
+  const defaultImage = data?.defaultImage || null;
+  const defaultImageUrl = getStrapiImage(defaultImage, '/placeholder-image.jpg');
   const ctaText = data?.ctaText || '';
   const ctaLink = data?.ctaLink || '';
-
-  // Get the hero image URL
-  const heroImageUrl = heroImage ? getStrapiImage(heroImage, '') : null;
 
   return (
     <section className="w-full bg-white">
       {/* ─── Hero ──────────────────────────────────────────────────── */}
-      <div className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden bg-sky-700 flex items-center justify-center">
-        {heroImageUrl && (
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroImageUrl})` }}
-          />
-        )}
-        {/* Overlay – reduces opacity for better text contrast */}
-        <div className="absolute inset-0 bg-black/30" />
-        
-        {/* Content – centered over the image */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center text-white">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tight">
-            {heroTitle}
-          </h1>
-          {heroSubtitle && (
-            <p className="text-lg md:text-xl text-white/80 mt-4 max-w-2xl mx-auto">
-              {heroSubtitle}
-            </p>
-          )}
-        </div>
-      </div>
+      <Hero data={heroData} compact={true} />
 
       {/* ─── Stats ────────────────────────────────────────────────── */}
       {stats.length > 0 && (
-        <div className="max-w-7xl mx-auto px-6 -mt-8 relative z-10">
+        <div id="stats" className="max-w-7xl mx-auto px-6 -mt-8 relative z-10 scroll-mt-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat: any, idx: number) => (
-              <div
-                key={idx}
-                className="bg-white shadow-lg border border-sky-100 p-6 text-center"
-              >
-                <div className="text-3xl md:text-4xl font-bold text-sky-600">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-neutral-500 mt-1">{stat.label}</div>
-              </div>
+              <FlipStatCard key={idx} stat={stat} />
             ))}
           </div>
         </div>
       )}
 
-      {/* ─── Intro ────────────────────────────────────────────────── */}
-      {(introTitle || introText) && (
-        <div className="max-w-4xl mx-auto px-6 py-16 md:py-20">
-          {introTitle && (
-            <h2 className="text-3xl md:text-4xl font-light text-neutral-950 tracking-tight mb-4">
-              {introTitle}
-            </h2>
-          )}
-          {introText && (
-            <div className="prose prose-lg max-w-none prose-headings:font-light prose-headings:tracking-tight prose-a:text-sky-600">
-              {renderRichText(introText)}
-            </div>
-          )}
-        </div>
-      )}
+      {/* ─── Content Blocks ──────────────────────────────────────── */}
+      {contentBlocks.length > 0 && (
+        <div className="max-w-7xl mx-auto px-6 py-16 md:py-24 space-y-16">
+          {contentBlocks.map((block: any, idx: number) => {
+            const title = block.title || '';
+            const text = block.text || null;
+            const position = block.imagePosition || 'left';
+            const imageUrl = defaultImageUrl;
 
-      {/* ─── Global Presence ──────────────────────────────────────── */}
-      {(globalPresenceTitle || globalPresenceText) && (
-        <div className="bg-neutral-50 py-16 md:py-20 border-t border-neutral-100">
-          <div className="max-w-4xl mx-auto px-6">
-            {globalPresenceTitle && (
-              <h2 className="text-3xl md:text-4xl font-light text-neutral-950 tracking-tight mb-4">
-                {globalPresenceTitle}
-              </h2>
-            )}
-            {globalPresenceText && (
-              <div className="prose prose-lg max-w-none prose-headings:font-light prose-headings:tracking-tight prose-a:text-sky-600">
-                {renderRichText(globalPresenceText)}
+            if (position === 'full') {
+              return (
+                <div key={idx} className="space-y-4">
+                  {title && (
+                    <h2 className="text-3xl md:text-4xl font-light text-neutral-950 tracking-tight">
+                      {title}
+                    </h2>
+                  )}
+                  <div className="w-full overflow-hidden rounded-lg shadow-sm">
+                    <img
+                      src={imageUrl}
+                      alt={title || 'Content image'}
+                      className="w-full h-auto max-h-[400px] object-cover"
+                    />
+                  </div>
+                  {text && (
+                    <div className="prose prose-lg max-w-none prose-headings:font-light prose-headings:tracking-tight prose-a:text-sky-600">
+                      {renderRichText(text)}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            const isLeft = position === 'left';
+            return (
+              <div
+                key={idx}
+                className={`flex flex-col ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'} gap-8 md:gap-12 items-center`}
+              >
+                <div className="w-full md:w-1/2 overflow-hidden rounded-lg shadow-sm">
+                  <img
+                    src={imageUrl}
+                    alt={title || 'Content image'}
+                    className="w-full h-auto max-h-[400px] object-cover"
+                  />
+                </div>
+                <div className="w-full md:w-1/2 space-y-3">
+                  {title && (
+                    <h2 className="text-3xl md:text-4xl font-light text-neutral-950 tracking-tight">
+                      {title}
+                    </h2>
+                  )}
+                  {text && (
+                    <div className="prose prose-lg max-w-none prose-headings:font-light prose-headings:tracking-tight prose-a:text-sky-600">
+                      {renderRichText(text)}
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
+            );
+          })}
         </div>
       )}
 
-      {/* ─── Highlight Cards ──────────────────────────────────────── */}
-      {highlights.length > 0 && (
-        <div className="max-w-7xl mx-auto px-6 py-16 md:py-20">
+      {/* ─── Explore More ────────────────────────────────────────── */}
+      {exploreCards.length > 0 && (
+        <div className="max-w-7xl mx-auto px-6 py-16 md:py-20 border-t border-neutral-100">
+          <h2 className="text-3xl md:text-4xl font-light text-neutral-950 tracking-tight text-center mb-12">
+            Explore More
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {highlights.map((card: any, idx: number) => {
+            {exploreCards.map((card: any, idx: number) => {
               const iconUrl = card.icon ? getStrapiImage(card.icon, '') : null;
               return (
                 <Link

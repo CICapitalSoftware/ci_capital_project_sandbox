@@ -1,5 +1,18 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface ElementsContentBlock extends Struct.ComponentSchema {
+  collectionName: 'components_elements_content_blocks';
+  info: {
+    displayName: 'ContentBlock';
+  };
+  attributes: {
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    imagePosition: Schema.Attribute.Enumeration<['left', 'right', 'center']>;
+    text: Schema.Attribute.Text;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface ElementsDropdownLink extends Struct.ComponentSchema {
   collectionName: 'components_elements_dropdown_links';
   info: {
@@ -27,12 +40,24 @@ export interface ElementsHighlightCard extends Struct.ComponentSchema {
   };
 }
 
+export interface ElementsPolicySection extends Struct.ComponentSchema {
+  collectionName: 'components_elements_policy_sections';
+  info: {
+    displayName: 'Policy Section';
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface ElementsStat extends Struct.ComponentSchema {
   collectionName: 'components_elements_stats';
   info: {
     displayName: 'Stat';
   };
   attributes: {
+    description: Schema.Attribute.String;
     label: Schema.Attribute.String;
     value: Schema.Attribute.String;
   };
@@ -63,8 +88,10 @@ export interface ElementsValueItem extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'elements.content-block': ElementsContentBlock;
       'elements.dropdown-link': ElementsDropdownLink;
       'elements.highlight-card': ElementsHighlightCard;
+      'elements.policy-section': ElementsPolicySection;
       'elements.stat': ElementsStat;
       'elements.stat-item': ElementsStatItem;
       'elements.value-item': ElementsValueItem;

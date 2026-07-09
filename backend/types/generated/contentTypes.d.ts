@@ -451,10 +451,18 @@ export interface ApiAboutPageAboutPage extends Struct.SingleTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    buttonLink: Schema.Attribute.String;
+    buttonText: Schema.Attribute.String;
+    caption: Schema.Attribute.String;
+    contentBlocks: Schema.Attribute.Component<'elements.content-block', true>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     ctaText: Schema.Attribute.String;
+    defaultImage: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
     globalPresenceText: Schema.Attribute.Blocks;
     globalPresenceTitle: Schema.Attribute.String;
     heroImage: Schema.Attribute.Media<
@@ -472,6 +480,10 @@ export interface ApiAboutPageAboutPage extends Struct.SingleTypeSchema {
       'api::about-page.about-page'
     > &
       Schema.Attribute.Private;
+    logoImage: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
     publishedAt: Schema.Attribute.DateTime;
     stats: Schema.Attribute.Component<'elements.stat', true>;
     updatedAt: Schema.Attribute.DateTime;
@@ -750,6 +762,37 @@ export interface ApiPressReleasePressRelease
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'title'>;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiPrivacyPolicyPrivacyPolicy extends Struct.SingleTypeSchema {
+  collectionName: 'privacy_policies';
+  info: {
+    displayName: 'Privacy Policy';
+    pluralName: 'privacy-policies';
+    singularName: 'privacy-policy';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    lastUpdated: Schema.Attribute.Date;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::privacy-policy.privacy-policy'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    sections: Schema.Attribute.Component<'elements.policy-section', true>;
     title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1457,6 +1500,7 @@ declare module '@strapi/strapi' {
       'api::navigation.navigation': ApiNavigationNavigation;
       'api::person.person': ApiPersonPerson;
       'api::press-release.press-release': ApiPressReleasePressRelease;
+      'api::privacy-policy.privacy-policy': ApiPrivacyPolicyPrivacyPolicy;
       'api::result-item.result-item': ApiResultItemResultItem;
       'api::timeline-era.timeline-era': ApiTimelineEraTimelineEra;
       'api::timeline-hero.timeline-hero': ApiTimelineHeroTimelineHero;

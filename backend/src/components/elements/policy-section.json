@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_elements_policy_sections",
+  "info": {
+    "displayName": "Policy Section"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "blocks"
+    }
+  },
+  "config": {}
+}

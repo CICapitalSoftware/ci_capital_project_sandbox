@@ -51,6 +51,40 @@
       "type": "component",
       "component": "elements.highlight-card",
       "repeatable": true
+    },
+    "logoImage": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "caption": {
+      "type": "string"
+    },
+    "buttonText": {
+      "type": "string"
+    },
+    "buttonLink": {
+      "type": "string"
+    },
+    "contentBlocks": {
+      "type": "component",
+      "component": "elements.content-block",
+      "repeatable": true
+    },
+    "defaultImage": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     }
   }
 }
