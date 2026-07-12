@@ -40,6 +40,19 @@ export interface ElementsHighlightCard extends Struct.ComponentSchema {
   };
 }
 
+export interface ElementsOffice extends Struct.ComponentSchema {
+  collectionName: 'components_elements_offices';
+  info: {
+    displayName: 'office';
+  };
+  attributes: {
+    address: Schema.Attribute.Text;
+    city: Schema.Attribute.String;
+    mapQuery: Schema.Attribute.String;
+    phone: Schema.Attribute.String;
+  };
+}
+
 export interface ElementsPolicySection extends Struct.ComponentSchema {
   collectionName: 'components_elements_policy_sections';
   info: {
@@ -85,16 +98,32 @@ export interface ElementsValueItem extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedContactPerson extends Struct.ComponentSchema {
+  collectionName: 'components_shared_contact_people';
+  info: {
+    displayName: 'Contact Person';
+  };
+  attributes: {
+    email: Schema.Attribute.Email;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    name: Schema.Attribute.String;
+    phone: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'elements.content-block': ElementsContentBlock;
       'elements.dropdown-link': ElementsDropdownLink;
       'elements.highlight-card': ElementsHighlightCard;
+      'elements.office': ElementsOffice;
       'elements.policy-section': ElementsPolicySection;
       'elements.stat': ElementsStat;
       'elements.stat-item': ElementsStatItem;
       'elements.value-item': ElementsValueItem;
+      'shared.contact-person': SharedContactPerson;
     }
   }
 }

@@ -61,6 +61,58 @@
         "videos",
         "audios"
       ]
+    },
+    "appImage": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "appStoreIcon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "appStoreUrl": {
+      "type": "string"
+    },
+    "googlePlayIcon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "googlePlayUrl": {
+      "type": "string"
+    },
+    "appLogo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "appTitle": {
+      "type": "string"
+    },
+    "appDescription": {
+      "type": "blocks"
     }
   }
 }

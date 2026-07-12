@@ -51,12 +51,17 @@ export default function ResultsCenterPage() {
       .then((data) => {
         if (data.length === 0) setError('No results found.');
         setItems(data);
+
+        // 🔥 Only expand the newest year
         const years = new Set<number>();
+        let maxYear = -Infinity;
         data.forEach((item) => {
           const attrs = item.attributes || item;
-          if (attrs.year) years.add(attrs.year);
+          if (attrs.year && attrs.year > maxYear) maxYear = attrs.year;
         });
+        if (maxYear !== -Infinity) years.add(maxYear);
         setExpandedYears(years);
+
         setLoading(false);
       })
       .catch(() => {

@@ -85,6 +85,62 @@
         "videos",
         "audios"
       ]
+    },
+    "ceoName": {
+      "type": "string"
+    },
+    "ceoTitle": {
+      "type": "string"
+    },
+    "ceoBio": {
+      "type": "text"
+    },
+    "ceoImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "ceoButtonText": {
+      "type": "string"
+    },
+    "ceoButtonLink": {
+      "type": "string"
+    },
+    "introImage1": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "introImage2": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "introText1": {
+      "type": "text"
+    },
+    "introText2": {
+      "type": "text"
+    },
+    "offices": {
+      "type": "component",
+      "component": "elements.office",
+      "repeatable": true
     }
   }
 }

@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_elements_offices",
+  "info": {
+    "displayName": "office"
+  },
+  "options": {},
+  "attributes": {
+    "city": {
+      "type": "string"
+    },
+    "address": {
+      "type": "text"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "mapQuery": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

@@ -1,0 +1,29 @@
+{
+  "kind": "singleType",
+  "collectionName": "investor_relations_contactss",
+  "info": {
+    "singularName": "investor-relations-contacts",
+    "pluralName": "investor-relations-contactss",
+    "displayName": "Investor Relations Contacts"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "description": {
+      "type": "text"
+    },
+    "email": {
+      "type": "email"
+    },
+    "telephone": {
+      "type": "string"
+    },
+    "contactPersons": {
+      "type": "component",
+      "component": "shared.contact-person",
+      "repeatable": true
+    }
+  }
+}

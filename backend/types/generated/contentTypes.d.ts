@@ -454,6 +454,12 @@ export interface ApiAboutPageAboutPage extends Struct.SingleTypeSchema {
     buttonLink: Schema.Attribute.String;
     buttonText: Schema.Attribute.String;
     caption: Schema.Attribute.String;
+    ceoBio: Schema.Attribute.Text;
+    ceoButtonLink: Schema.Attribute.String;
+    ceoButtonText: Schema.Attribute.String;
+    ceoImage: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    ceoName: Schema.Attribute.String;
+    ceoTitle: Schema.Attribute.String;
     contentBlocks: Schema.Attribute.Component<'elements.content-block', true>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -472,7 +478,15 @@ export interface ApiAboutPageAboutPage extends Struct.SingleTypeSchema {
     heroSubtitle: Schema.Attribute.String;
     heroTitle: Schema.Attribute.String;
     highlightCards: Schema.Attribute.Component<'elements.highlight-card', true>;
+    introImage1: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
+    introImage2: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
     introText: Schema.Attribute.Text;
+    introText1: Schema.Attribute.Text;
+    introText2: Schema.Attribute.Text;
     introTitle: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -484,6 +498,7 @@ export interface ApiAboutPageAboutPage extends Struct.SingleTypeSchema {
       'images' | 'files' | 'videos' | 'audios',
       true
     >;
+    offices: Schema.Attribute.Component<'elements.office', true>;
     publishedAt: Schema.Attribute.DateTime;
     stats: Schema.Attribute.Component<'elements.stat', true>;
     updatedAt: Schema.Attribute.DateTime;
@@ -565,6 +580,17 @@ export interface ApiHomeHeroHomeHero extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    appDescription: Schema.Attribute.Blocks;
+    appImage: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    appLogo: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    appStoreIcon: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
+    appStoreUrl: Schema.Attribute.String;
+    appTitle: Schema.Attribute.String;
     backgroundImage: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
@@ -578,6 +604,10 @@ export interface ApiHomeHeroHomeHero extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    googlePlayIcon: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
+    googlePlayUrl: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -594,6 +624,38 @@ export interface ApiHomeHeroHomeHero extends Struct.CollectionTypeSchema {
     titleLine2: Schema.Attribute.String;
     titleLine3: Schema.Attribute.String;
     titleLine4: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiInvestorRelationsContactsInvestorRelationsContacts
+  extends Struct.SingleTypeSchema {
+  collectionName: 'investor_relations_contactss';
+  info: {
+    displayName: 'Investor Relations Contacts';
+    pluralName: 'investor-relations-contactss';
+    singularName: 'investor-relations-contacts';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    contactPersons: Schema.Attribute.Component<'shared.contact-person', true>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    email: Schema.Attribute.Email;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::investor-relations-contacts.investor-relations-contacts'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    telephone: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1495,6 +1557,7 @@ declare module '@strapi/strapi' {
       'api::business-line.business-line': ApiBusinessLineBusinessLine;
       'api::global-scale.global-scale': ApiGlobalScaleGlobalScale;
       'api::home-hero.home-hero': ApiHomeHeroHomeHero;
+      'api::investor-relations-contacts.investor-relations-contacts': ApiInvestorRelationsContactsInvestorRelationsContacts;
       'api::media-kit-item.media-kit-item': ApiMediaKitItemMediaKitItem;
       'api::metric.metric': ApiMetricMetric;
       'api::navigation.navigation': ApiNavigationNavigation;
