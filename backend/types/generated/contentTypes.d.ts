@@ -478,16 +478,11 @@ export interface ApiAboutPageAboutPage extends Struct.SingleTypeSchema {
     heroSubtitle: Schema.Attribute.String;
     heroTitle: Schema.Attribute.String;
     highlightCards: Schema.Attribute.Component<'elements.highlight-card', true>;
-    introImage1: Schema.Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios'
-    >;
-    introImage2: Schema.Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios'
-    >;
     introText: Schema.Attribute.Text;
     introText1: Schema.Attribute.Text;
     introText2: Schema.Attribute.Text;
     introTitle: Schema.Attribute.String;
+    leader: Schema.Attribute.Component<'elements.leader', true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',

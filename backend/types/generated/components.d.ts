@@ -40,6 +40,18 @@ export interface ElementsHighlightCard extends Struct.ComponentSchema {
   };
 }
 
+export interface ElementsLeader extends Struct.ComponentSchema {
+  collectionName: 'components_elements_leaders';
+  info: {
+    displayName: 'leader';
+  };
+  attributes: {
+    name: Schema.Attribute.String;
+    photo: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface ElementsOffice extends Struct.ComponentSchema {
   collectionName: 'components_elements_offices';
   info: {
@@ -48,6 +60,8 @@ export interface ElementsOffice extends Struct.ComponentSchema {
   attributes: {
     address: Schema.Attribute.Text;
     city: Schema.Attribute.String;
+    lat: Schema.Attribute.Decimal;
+    lng: Schema.Attribute.Decimal;
     mapQuery: Schema.Attribute.String;
     phone: Schema.Attribute.String;
   };
@@ -118,6 +132,7 @@ declare module '@strapi/strapi' {
       'elements.content-block': ElementsContentBlock;
       'elements.dropdown-link': ElementsDropdownLink;
       'elements.highlight-card': ElementsHighlightCard;
+      'elements.leader': ElementsLeader;
       'elements.office': ElementsOffice;
       'elements.policy-section': ElementsPolicySection;
       'elements.stat': ElementsStat;

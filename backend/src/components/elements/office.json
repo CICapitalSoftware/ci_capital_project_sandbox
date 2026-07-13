@@ -16,6 +16,12 @@
     },
     "mapQuery": {
       "type": "string"
+    },
+    "lat": {
+      "type": "decimal"
+    },
+    "lng": {
+      "type": "decimal"
     }
   },
   "config": {}

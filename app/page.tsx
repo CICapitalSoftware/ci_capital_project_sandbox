@@ -215,7 +215,10 @@ export default function HomePage() {
       setHeroData(hero);
       
       const attrs = hero?.attributes || hero || {};
-      setAppImage(attrs.appImage || null);
+      // appImage is configured as a "multiple media" field in Strapi and
+      // therefore returns an array — take the first item. Falls back to
+      // the raw value in case the field type is ever changed to single media.
+      setAppImage(attrs.appImage?.[0] || attrs.appImage || null);
       setAppLogo(attrs.appLogo || null);
       setAppTitle(attrs.appTitle || null);
       setAppDescription(attrs.appDescription || null);

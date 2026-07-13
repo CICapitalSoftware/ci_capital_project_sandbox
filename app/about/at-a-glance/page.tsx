@@ -7,6 +7,8 @@ import Hero from '@/components/Hero';
 import FlipStatCard from '@/components/FlipStatCard';
 import Reveal from '@/components/Reveal';
 import OfficeLocations, { type OfficeLocation } from '@/components/OfficeLocations';
+import EgyptLiveGraphic from '@/components/EgyptLiveGraphic';
+import LeadershipTeaser, { type LeaderHighlight } from '@/components/LeadershipTeaser';
 
 // ─── Metadata ───────────────────────────────────────────────────
 export const metadata: Metadata = {
@@ -130,10 +132,6 @@ export default async function AtAGlancePage() {
   const introTitle = data?.introTitle || '';
   const introText1 = data?.introText1 || null;
   const introText2 = data?.introText2 || null;
-  const introImage1 = data?.introImage1 || null;
-  const introImage2 = data?.introImage2 || null;
-  const introImage1Url = getStrapiImage(introImage1, '/placeholder-image.jpg');
-  const introImage2Url = getStrapiImage(introImage2, '/placeholder-image.jpg');
 
   // ─── Stats ──────────────────────────────────────────────────
   const stats = data?.stats || [];
@@ -144,6 +142,16 @@ export default async function AtAGlancePage() {
 
   // ─── Office locations ───────────────────────────────────────
   const offices: OfficeLocation[] = data?.offices || [];
+
+  // ─── Leadership teaser ──────────────────────────────────────
+  const leadershipHighlights: LeaderHighlight[] = (data?.leadershipHighlights || []).map(
+    (leader: any) => ({
+      name: leader.name,
+      title: leader.title,
+      photoUrl: leader.photo ? getStrapiImage(leader.photo, null) : null,
+    })
+  );
+  const leadershipPageLink = data?.leadershipPageLink || '/about/leadership';
 
   // ─── Explore More & CTA ────────────────────────────────────
   const exploreCards = data?.highlightCards || [];
@@ -194,58 +202,33 @@ export default async function AtAGlancePage() {
           </Reveal>
         )}
 
-        {/* Row 1: Image (left) + First 2 paragraphs (right) */}
-        <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
-          {introImage1Url && (
-            <Reveal className="w-full md:w-1/2">
-              <div className="relative w-full aspect-[4/3] overflow-hidden shadow-sm">
-                <Image
-                  src={introImage1Url}
-                  alt="Company introduction"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </Reveal>
-          )}
-          <Reveal className="w-full md:w-1/2" delay={120}>
+        {/* Intro: text (left) + interactive network graphic (right) */}
+        <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
+          <Reveal className="w-full md:w-1/2" delay={80}>
             <div className="space-y-4">
               {introText1 && (
                 <div className="prose prose-lg max-w-none prose-headings:font-light prose-headings:tracking-tight prose-a:text-sky-600">
                   {renderRichText(introText1)}
                 </div>
               )}
-            </div>
-          </Reveal>
-        </div>
-
-        {/* Row 2: Next 2 paragraphs (left) + Image (right) */}
-        {introImage2Url && introText2 && (
-          <div className="flex flex-col md:flex-row-reverse gap-8 md:gap-12 items-center mt-16">
-            <Reveal className="w-full md:w-1/2">
-              <div className="relative w-full aspect-[4/3] overflow-hidden shadow-sm">
-                <Image
-                  src={introImage2Url}
-                  alt="Company introduction"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
-                  loading="lazy"
-                />
-              </div>
-            </Reveal>
-            <Reveal className="w-full md:w-1/2" delay={120}>
-              <div className="space-y-4">
+              {introText2 && (
                 <div className="prose prose-lg max-w-none prose-headings:font-light prose-headings:tracking-tight prose-a:text-sky-600">
                   {renderRichText(introText2)}
                 </div>
-              </div>
-            </Reveal>
-          </div>
-        )}
+              )}
+            </div>
+          </Reveal>
+
+          <Reveal className="w-full md:w-1/2">
+            <EgyptLiveGraphic />
+          </Reveal>
+        </div>
       </div>
+
+      {/* ─── 1b. Leadership Teaser ───────────────────────────────── */}
+      {leadershipHighlights.length > 0 && (
+        <LeadershipTeaser leaders={leadershipHighlights} learnMoreLink={leadershipPageLink} />
+      )}
 
       {/* ─── 2. Video Section ────────────────────────────────────── */}
       {videoUrl && (

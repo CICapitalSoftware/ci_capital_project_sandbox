@@ -1,26 +1,20 @@
 // lib/strapi.ts
-export const getStrapiImage = (imageObj: any, fallback: string = ''): string => {
-  if (!imageObj) return fallback;
-  if (typeof imageObj === 'string') return imageObj;
-  if (imageObj.url) {
-    if (imageObj.url.startsWith('http')) return imageObj.url;
-    return `${process.env.NEXT_PUBLIC_STRAPI_URL}${imageObj.url}`;
+
+export function getStrapiImage(image: any, fallback: string = ''): string {
+  if (!image) return fallback;
+
+  // Strapi v5 flat shape: image.url directly
+  // Strapi v4 nested shape: image.data.attributes.url
+  const url = image?.url || image?.data?.attributes?.url || null;
+
+  if (!url) return fallback;
+
+  // Already absolute (e.g. S3/Cloudinary provider) — return as-is.
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
   }
-  if (imageObj.data) {
-    // handle nested data if present
-    const data = imageObj.data;
-    if (Array.isArray(data) && data.length > 0 && data[0].attributes?.url) {
-      return `${process.env.NEXT_PUBLIC_STRAPI_URL}${data[0].attributes.url}`;
-    }
-    if (data.attributes?.url) {
-      return `${process.env.NEXT_PUBLIC_STRAPI_URL}${data.attributes.url}`;
-    }
-    if (data.url) {
-      return `${process.env.NEXT_PUBLIC_STRAPI_URL}${data.url}`;
-    }
-  }
-  if (Array.isArray(imageObj) && imageObj.length > 0) {
-    return getStrapiImage(imageObj[0], fallback);
-  }
-  return fallback;
-};
+
+  // Relative path (local provider, e.g. "/uploads/xyz.jpg") — prefix with Strapi host.
+  const base = process.env.NEXT_PUBLIC_STRAPI_URL || '';
+  return `${base}${url}`;
+}

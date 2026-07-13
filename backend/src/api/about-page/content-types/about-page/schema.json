@@ -111,26 +111,6 @@
     "ceoButtonLink": {
       "type": "string"
     },
-    "introImage1": {
-      "type": "media",
-      "multiple": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
-    "introImage2": {
-      "type": "media",
-      "multiple": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
     "introText1": {
       "type": "text"
     },
@@ -140,6 +120,11 @@
     "offices": {
       "type": "component",
       "component": "elements.office",
+      "repeatable": true
+    },
+    "leader": {
+      "type": "component",
+      "component": "elements.leader",
       "repeatable": true
     }
   }
